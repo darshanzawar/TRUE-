@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Darshan Traders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Header -->
+  <header class="bg-blue-700 text-white p-6 shadow-md">
+    <h1 class="text-3xl font-bold text-center">Darshan Traders</h1>
+    <nav class="mt-4 text-center space-x-4">
+      <button onclick="showSection('dashboard')" class="hover:underline">Home</button>
+      <button onclick="showSection('trading')" class="hover:underline">Trading</button>
+      <button onclick="showSection('importExport')" class="hover:underline">Import/Export</button>
+      <button onclick="showSection('fertilizer')" class="hover:underline">Fertilizer</button>
+      <button onclick="showSection('moneyGiven')" class="hover:underline">Money Given</button>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto mt-8 p-6 bg-white rounded-xl shadow-md">
+
+    <!-- Dashboard Section -->
+    <section id="dashboard">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Business Summary</h2>
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-blue-100 p-6 rounded-lg text-center">
+          <h3 class="font-bold text-blue-700">Quantity</h3>
+          <p id="quantity" class="text-2xl">0</p>
+          <button onclick="addValue('quantity')" class="mt-2 bg-blue-600 text-white px-4 py-1 rounded">+ Add</button>
+        </div>
+        <div class="bg-green-100 p-6 rounded-lg text-center">
+          <h3 class="font-bold text-green-700">Cash In</h3>
+          <p id="cashIn" class="text-2xl">0</p>
+          <button onclick="addValue('cashIn')" class="mt-2 bg-green-600 text-white px-4 py-1 rounded">+ Add</button>
+        </div>
+        <div class="bg-red-100 p-6 rounded-lg text-center">
+          <h3 class="font-bold text-red-700">Cash Out</h3>
+          <p id="cashOut" class="text-2xl">0</p>
+          <button onclick="addValue('cashOut')" class="mt-2 bg-red-600 text-white px-4 py-1 rounded">+ Add</button>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">Contact Numbers</h3>
+      <ul id="contacts" class="mb-4 text-gray-600">
+        <li>📞 +91 98765 43210</li>
+        <li>📞 +91 91234 56789</li>
+      </ul>
+
+      <div class="flex space-x-2">
+        <input id="contactInput" type="text" placeholder="Enter contact number" class="border px-3 py-2 w-full rounded">
+        <button onclick="addContact()" class="bg-purple-600 text-white px-4 rounded hover:bg-purple-700">Add</button>
+      </div>
+    </section>
+
+    <!-- Trading Section -->
+    <section id="trading" class="hidden">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Trading Tools</h2>
+      <button class="bg-yellow-500 text-white px-4 py-2 rounded mb-4">Add Product</button>
+      <button class="bg-indigo-500 text-white px-4 py-2 rounded mb-4 ml-2">Generate Invoice</button>
+      <button onclick="checkPaymentStatus()" class="bg-teal-500 text-white px-4 py-2 rounded mb-4 ml-2">Check Payment Status</button>
+      <p id="paymentStatus" class="mt-2 text-gray-700"></p>
+    </section>
+
+    <!-- Import Export Section -->
+    <section id="importExport" class="hidden">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Import/Export Tools</h2>
+      <button class="bg-pink-600 text-white px-4 py-2 rounded mb-4">Track Shipment</button>
+      <button class="bg-blue-800 text-white px-4 py-2 rounded mb-4 ml-2">Upload Documents</button>
+      <button class="bg-gray-800 text-white px-4 py-2 rounded mb-4 ml-2">Trade Summary</button>
+    </section>
+
+    <!-- Fertilizer Section -->
+    <section id="fertilizer" class="hidden">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Fertilizer Division</h2>
+      <button class="bg-green-600 text-white px-4 py-2 rounded mb-4">View Stock</button>
+      <button class="bg-orange-600 text-white px-4 py-2 rounded mb-4 ml-2">Place Order</button>
+      <button class="bg-red-600 text-white px-4 py-2 rounded mb-4 ml-2">Dealer Contacts</button>
+      <button onclick="addStock()" class="bg-blue-700 text-white px-4 py-2 rounded mb-4 ml-2">+ Add Stock</button>
+      <p id="stockStatus" class="mt-2 text-gray-700"></p>
+    </section>
+
+    <!-- Money Given Section -->
+    <section id="moneyGiven" class="hidden">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Money Given</h2>
+      <div class="space-y-4">
+        <input id="moneyGivenName" type="text" placeholder="Enter name" class="border px-4 py-2 w-full rounded">
+        <input id="moneyGivenPhone" type="text" placeholder="Enter phone number" class="border px-4 py-2 w-full rounded">
+        <button onclick="submitMoneyGiven()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+        <p id="moneyGivenResult" class="text-green-700 font-medium mt-2"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-10 p-4 text-center text-sm text-gray-500">
+    © 2025 Darshan Traders. All rights reserved.
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    function addValue(id) {
+      const current = parseInt(document.getElementById(id).innerText);
+      const amount = prompt("Enter amount to add:");
+      if (!isNaN(amount) && amount.trim() !== "") {
+        document.getElementById(id).innerText = current + parseInt(amount);
+      }
+    }
+
+    function addContact() {
+      const input = document.getElementById("contactInput");
+      const number = input.value.trim();
+      if (number !== "") {
+        const li = document.createElement("li");
+        li.innerText = "📞 " + number;
+        document.getElementById("contacts").appendChild(li);
+        input.value = "";
+      }
+    }
+
+    function showSection(sectionId) {
+      const sections = ["dashboard", "trading", "importExport", "fertilizer", "moneyGiven"];
+      sections.forEach(id => {
+        document.getElementById(id).classList.add("hidden");
+      });
+      document.getElementById(sectionId).classList.remove("hidden");
+    }
+
+    function addStock() {
+      const stock = prompt("Enter stock quantity to add:");
+      if (!isNaN(stock) && stock.trim() !== "") {
+        document.getElementById("stockStatus").innerText = `Stock increased by ${stock} units.`;
+      } else {
+        alert("Please enter a valid number.");
+      }
+    }
+
+    function checkPaymentStatus() {
+      const status = prompt("Enter client name to check payment status:");
+      if (status.trim() !== "") {
+        document.getElementById("paymentStatus").innerText = `Payment status for ${status}: Pending.`;
+      }
+    }
+
+    function submitMoneyGiven() {
+      const name = document.getElementById("moneyGivenName").value.trim();
+      const phone = document.getElementById("moneyGivenPhone").value.trim();
+      if (name && phone) {
+        document.getElementById("moneyGivenResult").innerText = `Money given recorded for ${name} (Phone: ${phone}).`;
+      } else {
+        alert("Please fill in both name and phone number.");
+      }
+    }
+  </script>
+</body>
+</html>
+ 
